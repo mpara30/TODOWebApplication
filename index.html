@@ -3,25 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>TODO List</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index.css"/>
 </head>
 <body>
-
-
     <div class="container">
         <header>
             <h1>TODO LIST</h1>
             <input class="new-input" placeholder="Ce ai de facut astazi?">
         </header>
         <div class="principal">
-            <div class="item">Test</div>
+            <input id="toggle-all" class="toggle-all" type="checkbox">
+            <label for="toggle-all">Complete all</label>
         </div>
-        <div class="principal">
-            <div class="item">Test</div>
-        </div>
-        <div class="principal">
-            <input class="new-input" type="checkbox">
-        </div>
+        <ul id="lista" class="list"></ul>
 
     </div>
     <script src="index.js"></script>
