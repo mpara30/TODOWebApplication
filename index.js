@@ -1,26 +1,33 @@
-let container = document.getElementsByClassName("container")
+if(localStorage.getItem("tester")){
+    children=JSON.parse(localStorage.getItem("tester"))
+} else {
+    children = []
+}
 
-let children = [
-    {
-        "id":1,
-        "continutToDo":"Codul in html",
-    },
-    {
-        "id":2,
-        "continutToDo":"Codul in css",
-    },
-    {
-        "id":3,
-        "continutToDo":"Codul in javascript",
+function save(){
+    let child = {
+       id: 1,
+       continutToDo: document.getElementById("todo-input").value
+    };
+    children.push(child)
+    localStorage.setItem("tester", JSON.stringify(children))
+}
+
+let input = document.getElementById("todo-input")
+input.addEventListener("keyup", function (event){
+    if (event.key === "Enter") {
+        location.reload()
+        save()
     }
-]
+})
+
+//children = []
 
 function createItem(a){
     let newList = document.createElement("li")
     newList.append(a)
     return newList
 }
-
 
 for (let i = 0; i<children.length;i++) {
     let current = children[i]
@@ -31,7 +38,7 @@ for (let i = 0; i<children.length;i++) {
 
     let newInput = document.createElement("input")
     newInput.id = id
-    newInput.name = id
+    newInput.name = "lista-curenta"
     newInput.type = "checkbox"
     newInput.classList.add("toggle")
 
@@ -39,11 +46,48 @@ for (let i = 0; i<children.length;i++) {
     newLabel.htmlFor = name
     newLabel.innerHTML = continutToDo
 
-    newElement.append(newInput, newLabel)
+    let newButton = document.createElement("button")
+    newButton.classList.add("delete")
+    newButton.addEventListener("click", remove)
+
+    newElement.append(newInput, newLabel, newButton)
     newElement.classList.add("principal")
 
     let lista = document.querySelector('#lista')
     lista.appendChild(createItem(newElement))
+}
+
+function toggleChecked(checked = true){
+
+    let checkedToggle = document.querySelectorAll('input[name="lista-curenta"]')
+    checkedToggle.forEach((li) => {
+        li.checked = checked
+    });
+}
+
+let checkBox = document.getElementById("toggle-all")
+checkBox.onclick = checkAll
+
+function checkAll(){
+    toggleChecked()
+    this.onclick = uncheckAll
+}
+
+function uncheckAll(){
+    toggleChecked(false)
+    this.onclick = checkAll
+}
+
+function remove(continutToDo){
+    let children=JSON.parse(localStorage.getItem("tester"))
+    for(let i = 0; i < children.length; i++){
+        if(children[i].continutToDo === continutToDo){
+            children.splice(i,1);
+            break;
+        }
+    }
+    localStorage.setItem("tester", JSON.stringify(children))
+    location.reload()
 }
 
 console.log(children)
