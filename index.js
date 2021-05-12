@@ -1,14 +1,27 @@
+let children = []
+
 if(localStorage.getItem("tester")){
     children=JSON.parse(localStorage.getItem("tester"))
 } else {
     children = []
 }
 
+let value = localStorage.getItem("index")
+
+let indexId = 0
+
+if(value){
+    indexId = parseInt(value)
+}
+
 function save(){
     let child = {
-       id: 1,
-       continutToDo: document.getElementById("todo-input").value
+       id: indexId,
+       continutToDo: document.getElementById("todo-input").value,
+        checkIfDone: false
     };
+    indexId = indexId + 1
+    localStorage.setItem("index", indexId)
     children.push(child)
     localStorage.setItem("tester", JSON.stringify(children))
 }
@@ -16,8 +29,8 @@ function save(){
 let input = document.getElementById("todo-input")
 input.addEventListener("keyup", function (event){
     if (event.key === "Enter") {
-        location.reload()
         save()
+        location.reload()
     }
 })
 
@@ -28,6 +41,8 @@ function createItem(a){
     newList.append(a)
     return newList
 }
+
+console.log(children)
 
 for (let i = 0; i<children.length;i++) {
     let current = children[i]
@@ -48,7 +63,9 @@ for (let i = 0; i<children.length;i++) {
 
     let newButton = document.createElement("button")
     newButton.classList.add("delete")
-    newButton.addEventListener("click", remove)
+    newButton.addEventListener("click",()=>{
+        remove(continutToDo)
+    })
 
     newElement.append(newInput, newLabel, newButton)
     newElement.classList.add("principal")
@@ -59,10 +76,18 @@ for (let i = 0; i<children.length;i++) {
 
 function toggleChecked(checked = true){
 
-    let checkedToggle = document.querySelectorAll('input[name="lista-curenta"]')
-    checkedToggle.forEach((li) => {
-        li.checked = checked
-    });
+    for(let i = 0; i<children.length; i++){
+        children[i].checkIfDone = true
+
+        let checkedToggle = document.querySelectorAll('input[name="lista-curenta"]')
+        checkedToggle.forEach((li) => {
+            li.checked = checked
+            localStorage.checked = true
+        });
+
+    }
+    console.log(children)
+    localStorage.setItem("tester", JSON.stringify(children))
 }
 
 let checkBox = document.getElementById("toggle-all")
@@ -79,15 +104,29 @@ function uncheckAll(){
 }
 
 function remove(continutToDo){
+
     let children=JSON.parse(localStorage.getItem("tester"))
+    console.log(children)
     for(let i = 0; i < children.length; i++){
         if(children[i].continutToDo === continutToDo){
             children.splice(i,1);
+            console.log("A intrat in if")
             break;
         }
     }
+    indexId = indexId - 1
+    localStorage.setItem("index", indexId)
     localStorage.setItem("tester", JSON.stringify(children))
+    console.log(children)
     location.reload()
 }
+
+if(children.length === 1){
+    document.getElementById("todo-co").innerHTML = children.length + " item left"
+} else {
+    document.getElementById("todo-co").innerHTML = children.length + " items left"
+}
+
+
 
 console.log(children)
