@@ -8,7 +8,7 @@ if(localStorage.getItem("tester")){
 
 let value = localStorage.getItem("index")
 
-let indexId = 0
+let indexId = 1
 
 if(value){
     indexId = parseInt(value)
@@ -34,15 +34,11 @@ input.addEventListener("keyup", function (event){
     }
 })
 
-//children = []
-
 function createItem(a){
     let newList = document.createElement("li")
     newList.append(a)
     return newList
 }
-
-console.log(children)
 
 for (let i = 0; i<children.length;i++) {
     let current = children[i]
@@ -76,16 +72,15 @@ for (let i = 0; i<children.length;i++) {
 
 function toggleChecked(checked = true){
 
-    for(let i = 0; i<children.length; i++){
-        children[i].checkIfDone = true
-
-        let checkedToggle = document.querySelectorAll('input[name="lista-curenta"]')
-        checkedToggle.forEach((li) => {
-            li.checked = checked
-            localStorage.checked = true
-        });
-
+    for(let i = 0; i <children.length;i++){
+        children[i].checkIfDone = checked
     }
+
+    let checkedToggle = document.querySelectorAll('input[name="lista-curenta"]')
+    checkedToggle.forEach((li) => {
+        li.checked = checked
+    });
+
     console.log(children)
     localStorage.setItem("tester", JSON.stringify(children))
 }
@@ -106,18 +101,15 @@ function uncheckAll(){
 function remove(continutToDo){
 
     let children=JSON.parse(localStorage.getItem("tester"))
-    console.log(children)
     for(let i = 0; i < children.length; i++){
         if(children[i].continutToDo === continutToDo){
             children.splice(i,1);
-            console.log("A intrat in if")
             break;
         }
     }
     indexId = indexId - 1
     localStorage.setItem("index", indexId)
     localStorage.setItem("tester", JSON.stringify(children))
-    console.log(children)
     location.reload()
 }
 
@@ -127,6 +119,20 @@ if(children.length === 1){
     document.getElementById("todo-co").innerHTML = children.length + " items left"
 }
 
+function checkedList(){
+    for(let i = 0; i<children.length; i++){
+        let chk = document.getElementById(i).checked
+        if(chk === true){
+            children[i].checkIfDone = true
+            chk.checked = true
+        } else {
+            children[i].checkIfDone = false
+            chk.checked = false
+        }
+    }
+}
 
+let x = document.getElementsByName("lista-curenta")
+x.onclick = checkedList()
 
 console.log(children)
